@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ArchitectureGovernance
+  datasource:
+    url: jdbc:mysql://localhost:3306/architecture_guard
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+inspection:
+  scheduling:
+    scan-interval-ms: 10000
+    batch-size: 50
+  executor:
+    core-pool-size: 4
+    max-pool-size: 16
+    queue-capacity: 200
+    thread-name-prefix: inspection-job-
+
+mybatis:
+  mapper-locations: classpath:repository/*.xml
+  type-aliases-package: org.example.inspect.entity
+  configuration:
+    map-underscore-to-camel-case: true
