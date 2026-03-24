@@ -1,14 +1,14 @@
 package org.example.inspect.scheduler;
 
+import java.util.List;
+import java.util.concurrent.Executor;
+
 import org.example.inspect.entity.InspectionJob;
 import org.example.inspect.service.InspectionJobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.concurrent.Executor;
 
 @Component
 public class InspectionScheduler {
@@ -33,4 +33,6 @@ public class InspectionScheduler {
     private void cleanLocks() {
         inspectionJobService.releaseTimeoutLocks();
     }
+
+    
 }
