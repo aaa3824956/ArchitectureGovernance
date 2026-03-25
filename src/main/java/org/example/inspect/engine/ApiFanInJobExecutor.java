@@ -1,7 +1,7 @@
-package org.example.inspect.rule;
+package org.example.inspect.engine;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
 import org.example.inspect.dto.ApiFanInDTO;
 import org.example.inspect.entity.InspectionIssue;
 import org.example.inspect.entity.InspectionJob;
@@ -10,7 +10,8 @@ import org.example.inspect.repository.InspectionIssueMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 @Component
 public class ApiFanInJobExecutor implements JobExecutor {

@@ -23,7 +23,7 @@ public class InspectionScheduler {
     @Scheduled(fixedDelayString = "${inspection.scheduling.scan-interval-ms:10000}")
     public void schedule() {
         cleanLocks();
-        List<InspectionJob> jobs = inspectionJobService.findDueJobs();
+        List<InspectionJob> jobs = inspectionJobService.claimDueJobs();
         for (InspectionJob job : jobs) {
             InspectionJob snapshot = job;
             inspectionJobExecutor.execute(() -> inspectionJobService.runInspectionJob(snapshot));
@@ -33,6 +33,4 @@ public class InspectionScheduler {
     private void cleanLocks() {
         inspectionJobService.releaseTimeoutLocks();
     }
-
-    
 }

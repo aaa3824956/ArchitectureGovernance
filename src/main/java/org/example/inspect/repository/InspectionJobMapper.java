@@ -12,15 +12,37 @@ import java.util.List;
 
 @Mapper
 public interface InspectionJobMapper extends BaseMapper<InspectionJob> {
-    @Select("""
-        SELECT *
-        FROM inspection_job
+    @Update("""
+        UPDATE inspection_job
+        SET locked = 1,
+            lock_node = #{nodeId},
+            lock_time = #{claimTime}
         WHERE status = 'RUNNING'
-        AND next_run_time <= NOW()
+        AND next_run_time <= #{claimTime}
+        AND locked = 0
         ORDER BY next_run_time ASC
         LIMIT #{limit}
         """)
-    List<InspectionJob> findDueJobs(@Param("limit") int limit);
+    int claimDueJobs(
+            @Param("nodeId") String nodeId,
+            @Param("claimTime") LocalDateTime claimTime,
+            @Param("limit") int limit
+    );
+
+    @Select("""
+        SELECT *
+        FROM inspection_job
+        WHERE locked = 1
+        AND lock_node = #{nodeId}
+        AND lock_time = #{claimTime}
+        ORDER BY next_run_time ASC
+        LIMIT #{limit}
+        """)
+    List<InspectionJob> findClaimedJobs(
+            @Param("nodeId") String nodeId,
+            @Param("claimTime") LocalDateTime claimTime,
+            @Param("limit") int limit
+    );
 
     @Update("""
         UPDATE inspection_job

@@ -1,4 +1,4 @@
-package org.example.inspect.rule;
+package org.example.inspect.engine;
 
 import org.example.inspect.entity.InspectionJob;
 import org.springframework.stereotype.Component;

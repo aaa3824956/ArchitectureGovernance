@@ -1,8 +1,6 @@
 package org.example.inspect.engine;
 
 import org.example.inspect.entity.InspectionJob;
-import org.example.inspect.rule.JobExecutor;
-import org.example.inspect.rule.JobRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,29 +28,31 @@ public class InspectionJobService {
     @Autowired
     private InspectionProperties inspectionProperties;
 
-    public List<InspectionJob> findDueJobs() {
+    public List<InspectionJob> claimDueJobs() {
+        String nodeId = resolveNodeId();
         int limit = inspectionProperties.getScheduling().getBatchSize();
-        return inspectionJobMapper.findDueJobs(limit);
+        LocalDateTime claimTime = LocalDateTime.now();
+        int claimed = inspectionJobMapper.claimDueJobs(nodeId, claimTime, limit);
+        if (claimed <= 0) {
+            return Collections.emptyList();
+        }
+        return inspectionJobMapper.findClaimedJobs(nodeId, claimTime, limit);
     }
 
     public void runInspectionJob(InspectionJob inspectionJob) {
         long startMs = System.currentTimeMillis();
         String nodeId = resolveNodeId();
-        boolean locked = false;
-        int maxRetry = inspectionJob.getMaxRetry() != null ? inspectionJob.getMaxRetry() : 3;
+        Integer maxRetryCfg = inspectionJob.getMaxRetry();
+        int maxRetry = maxRetryCfg == null ? 3 : maxRetryCfg;
+        Integer retryIntervalCfg = inspectionJob.getRetryIntervalSeconds();
         int retryInterval =
-                inspectionJob.getRetryIntervalSeconds() != null
-                        ? inspectionJob.getRetryIntervalSeconds()
-                        : 60;
-        int priorFailures = inspectionJob.getRetryCount() != null ? inspectionJob.getRetryCount() : 0;
+                retryIntervalCfg == null
+                        ? 60
+                        : retryIntervalCfg;
+        Integer retryCount = inspectionJob.getRetryCount();
+        int priorFailures = retryCount == null ? 0 : retryCount;
 
         try {
-            int lockRows = inspectionJobMapper.tryLock(inspectionJob.getJobId(), nodeId);
-            if (lockRows == 0) {
-                return;
-            }
-            locked = true;
-
             jobEngine.executeRule(inspectionJob.getInspectionId(), inspectionJob);
 
             inspectionJobMapper.resetRetryCount(inspectionJob.getJobId());
@@ -99,9 +103,7 @@ public class InspectionJobService {
                 );
             }
         } finally {
-            if (locked) {
-                inspectionJobMapper.unlock(inspectionJob.getJobId(), nodeId);
-            }
+            inspectionJobMapper.unlock(inspectionJob.getJobId(), nodeId);
         }
     }
 
@@ -112,7 +114,7 @@ public class InspectionJobService {
     private static String resolveNodeId() {
         try {
             return InetAddress.getLocalHost().getHostAddress();
-        } catch (Exception e) {
+        } catch (UnknownHostException e) {
             return "unknown";
         }
     }
