@@ -20,7 +20,9 @@ CREATE TABLE IF NOT EXISTS inspection_job_execution_log (
 ALTER TABLE inspection_job
     ADD COLUMN max_retry INT NOT NULL DEFAULT 3,
     ADD COLUMN retry_count INT NOT NULL DEFAULT 0,
-    ADD COLUMN retry_interval_seconds INT NOT NULL DEFAULT 60;
+    ADD COLUMN retry_interval_seconds INT NOT NULL DEFAULT 60,
+    ADD COLUMN claim_token VARCHAR(64) NULL;
 
 -- 建议为调度查询补充索引（按实际表结构调整列名）
 -- CREATE INDEX idx_job_due ON inspection_job (status, next_run_time);
+-- CREATE INDEX idx_job_claim ON inspection_job (lock_node, claim_token);

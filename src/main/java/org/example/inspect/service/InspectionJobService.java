@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class InspectionJobService {
@@ -31,12 +32,12 @@ public class InspectionJobService {
     public List<InspectionJob> claimDueJobs() {
         String nodeId = resolveNodeId();
         int limit = inspectionProperties.getScheduling().getBatchSize();
-        LocalDateTime claimTime = LocalDateTime.now();
-        int claimed = inspectionJobMapper.claimDueJobs(nodeId, claimTime, limit);
+        String claimToken = UUID.randomUUID().toString();
+        int claimed = inspectionJobMapper.claimDueJobs(nodeId, claimToken, limit);
         if (claimed <= 0) {
             return Collections.emptyList();
         }
-        return inspectionJobMapper.findClaimedJobs(nodeId, claimTime, limit);
+        return inspectionJobMapper.findClaimedJobs(nodeId, claimToken, limit);
     }
 
     public void runInspectionJob(InspectionJob inspectionJob) {

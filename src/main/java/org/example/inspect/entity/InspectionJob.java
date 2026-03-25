@@ -29,6 +29,9 @@ public class InspectionJob {
 
     private String ruleParamJson;
 
+    /** 本轮批量认领的唯一标识，避免并发场景误取任务 */
+    private String claimToken;
+
     /** 连续失败允许的最大次数（含），超过后按 Cron 进入下一轮 */
     @Builder.Default
     private Integer maxRetry = 3;
