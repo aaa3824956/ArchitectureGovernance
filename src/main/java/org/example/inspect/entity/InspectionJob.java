@@ -29,6 +29,10 @@ public class InspectionJob {
 
     private String ruleParamJson;
 
+    /** 问题严重程度：BLOCKER / HIGH / MEDIUM / LOW */
+    @Builder.Default
+    private String severity = "HIGH";
+
     /** 本轮批量认领的唯一标识，避免并发场景误取任务 */
     private String claimToken;
 

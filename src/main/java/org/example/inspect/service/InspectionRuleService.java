@@ -20,7 +20,8 @@ public class InspectionRuleService {
     public void bindRule(
             Long inspectionId,
             Long ruleId,
-            String cronExpr){
+            String cronExpr,
+            String severity){
 
         InspectionRule rule =
                 new InspectionRule();
@@ -33,6 +34,7 @@ public class InspectionRuleService {
                 .inspectionId(inspectionId)
                 .ruleId(ruleId)
                 .cronExpr(cronExpr)
+                .severity(severity != null ? severity : "HIGH")
                 .status("STOPPED")
                 .build();
         inspectionJobMapper.insert(job);
