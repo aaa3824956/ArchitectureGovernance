@@ -1,12 +1,17 @@
 package org.example.inspect.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.time.LocalDateTime;
 
+@TableName("inspection_issue")
 public class InspectionIssue {
 
+    @TableId(type = IdType.AUTO)
     private Long issueId;
     private Long inspectionId;
     private Long jobId;

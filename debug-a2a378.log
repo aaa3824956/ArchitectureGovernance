@@ -1,0 +1,4 @@
+{"sessionId":"a2a378","hypothesisId":"H1_proxy_factory","location":"AiClientConfig.buildRequestFactory","message":"debug","timestamp":1774788677456,"data":{"proxyEnabled":false,"connectTimeoutMs":20000}}
+{"sessionId":"a2a378","hypothesisId":"H1_simple_factory","location":"AiClientConfig.buildRequestFactory","message":"debug","timestamp":1774788677458,"data":{"ok":true}}
+{"sessionId":"a2a378","hypothesisId":"H1_proxy_factory","location":"AiClientConfig.buildRequestFactory","message":"debug","timestamp":1774791819694,"data":{"proxyEnabled":false,"connectTimeoutMs":20000}}
+{"sessionId":"a2a378","hypothesisId":"H1_simple_factory","location":"AiClientConfig.buildRequestFactory","message":"debug","timestamp":1774791819696,"data":{"ok":true}}

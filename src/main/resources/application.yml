@@ -7,6 +7,10 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+# 8080 被占用时：PowerShell 执行 `$env:SERVER_PORT=8081` 后再启动；或结束占用 8080 的进程
+server:
+  port: ${SERVER_PORT:8080}
+
 inspection:
   scheduling:
     scan-interval-ms: 10000
@@ -16,8 +20,24 @@ inspection:
     max-pool-size: 16
     queue-capacity: 200
     thread-name-prefix: inspection-job-
+  # 大模型：默认对接硅基流动（OpenAI 兼容 /v1/chat/completions）。本地演示见 application-demo.yml
+  ai:
+    enabled: true
+    demo-mode: false
+    # 务必含 /v1；中文站与国际站账号不互通，见 https://docs.siliconflow.cn/
+    base-url: https://api.siliconflow.cn/v1
+    chat-path: /chat/completions
+    api-key: ${SILICONFLOW_API_KEY:${INSPECTION_AI_API_KEY:}}
+    model: Qwen/Qwen2.5-7B-Instruct
+    temperature: 0.3
+    connect-timeout-ms: 20000
+    read-timeout-ms: 180000
+    json-object-response-format: true
+    # 国内直连 .cn 一般不需代理；若改接 OpenAI 等境外地址再配 proxy-host / proxy-port
+    proxy-host: ""
+    proxy-port: 0
 
-mybatis:
+mybatis-plus:
   mapper-locations: classpath:repository/*.xml
   type-aliases-package: org.example.inspect.entity
   configuration:

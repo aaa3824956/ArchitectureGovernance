@@ -1,0 +1,21 @@
+# 显式激活硅基流动 profile（与主 application.yml 默认一致，便于文档/脚本统一写 profiles=siliconflow）
+# 环境变量: SILICONFLOW_API_KEY
+# 启动示例: mvn spring-boot:run "-Dspring-boot.run.profiles=siliconflow"
+#
+# 若返回 400 且与 response_format 相关，可将 json-object-response-format 改为 false
+inspection:
+  ai:
+    enabled: true
+    demo-mode: false
+    # 国内控制台密钥通常走 cn；若你使用国际站可改为 https://api.siliconflow.com/v1
+    base-url: https://api.siliconflow.cn/v1
+    chat-path: /chat/completions
+    api-key: ${SILICONFLOW_API_KEY:}
+    model: Qwen/Qwen2.5-7B-Instruct
+    temperature: 0.3
+    connect-timeout-ms: 20000
+    read-timeout-ms: 180000
+    json-object-response-format: true
+    # 国内直连 .cn 一般不需代理；若走系统全局代理再按需填写
+    proxy-host: ""
+    proxy-port: 0

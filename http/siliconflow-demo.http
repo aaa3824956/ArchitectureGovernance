@@ -1,0 +1,13 @@
+### 0) 确认配置（需先以 profile=siliconflow 启动，且已配置环境变量 SILICONFLOW_API_KEY）
+GET http://localhost:8080/inspection/ai/status
+
+### 1) 调用真实模型（先执行 db/seed-ai-demo-fixed-ids.sql，固定 issue_id=9999003）
+POST http://localhost:8080/inspection/issues/9999003/ai/suggest
+Content-Type: application/json
+
+{
+  "userNote": "业务上支付状态查询与订单详情耦合，各域为省事直接调同一接口。请给出可落地的拆分与迁移建议。"
+}
+
+### 2) 拉取最新一条
+GET http://localhost:8080/inspection/issues/9999003/ai/latest?kind=EXPLAIN_FIX

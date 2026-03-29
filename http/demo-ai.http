@@ -1,0 +1,13 @@
+### 0) 查看当前 AI 配置（是否演示模式）
+GET http://localhost:8080/inspection/ai/status
+
+### 1) 生成建议（推荐先执行 db/seed-ai-demo-fixed-ids.sql，固定使用 issue_id=9999003）
+POST http://localhost:8080/inspection/issues/9999003/ai/suggest
+Content-Type: application/json
+
+{
+  "userNote": "演示：希望优先评估对订单核心域的影响"
+}
+
+### 2) 取最新一条
+GET http://localhost:8080/inspection/issues/9999003/ai/latest?kind=EXPLAIN_FIX

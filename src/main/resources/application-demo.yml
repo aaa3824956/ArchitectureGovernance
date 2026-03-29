@@ -1,0 +1,6 @@
+# 使用方式：java -jar app.jar --spring.profiles.active=demo
+# 或 IDE Active profiles: demo
+inspection:
+  ai:
+    demo-mode: false
+    # 演示模式不调用外网，enabled / api-key 可保持默认
